@@ -28,7 +28,6 @@ router.get('/available', (req, res, next) => {
       paid: false,
       reservedUntil: { $gte: moment.utc() }
     }).then(reservedSeats => {
-      console.log(reservedSeats)
       const reservedSeatIds = reservedSeats.map(
         reservedSeat => reservedSeat.seat
       )

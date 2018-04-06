@@ -7,12 +7,14 @@ const Reservation = require('../models/reservation')
 
 describe('mongoose Schema', () => {
   const userData = {
-    email: 'user@user.com',
+    email: 'user2@user.com',
     password: 'test'
   }
 
-  beforeAll(() => {
-    mongoose.connect(MONGOOSE_CHECK_IN_DEV)
+  beforeAll(async () => {
+    // await User.removeAllUsers()
+    // await Reservation.removeAllReservations()
+    await mongoose.connect(MONGOOSE_CHECK_IN_DEV)
   })
 
   beforeEach(() => {
@@ -29,6 +31,8 @@ describe('mongoose Schema', () => {
   })
 
   it('should create a user and make a reservation', () => {
+    const seatNum = 2
+
     return User.createUser(userData.email, userData.password).then(email => {
       expect(email).toBeDefined()
       return User.findOne({ email }).then(user => {
@@ -38,7 +42,7 @@ describe('mongoose Schema', () => {
           return Reservation.makeReservation(
             userData.email,
             userData.password,
-            seat
+            seatNum
           ).then(reservation => {
             expect(reservation.user.toJSON()).toEqual(user.toJSON())
           })
