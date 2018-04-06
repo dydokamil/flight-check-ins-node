@@ -4,6 +4,7 @@ const moment = require('moment')
 const Schema = mongoose.Schema
 
 const ReservationSchema = new Schema({
+  reservedBy: { type: Schema.Types.ObjectId, ref: 'User' },
   seat: { type: Schema.Types.ObjectId, ref: 'Seat' },
   reservedUntil: { type: Date, default: moment.utc().add('minutes', 3) },
   paid: { type: Schema.Types.Boolean }
