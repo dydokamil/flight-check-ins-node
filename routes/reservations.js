@@ -22,7 +22,7 @@ router.post('/', function (req, res) {
         return res.json(result)
         // return res.json(result)
       })
-      .catch(err => res.json(err))
+      .catch(err => res.status(400).json(err.message))
   }
 })
 
