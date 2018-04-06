@@ -31,11 +31,13 @@ ReservationSchema.statics.makeReservation = function (email, password, seatId) {
               throw new Error('Password incorrect.')
             }
 
-            const reservation = new this({
-              user,
-              retrievedSeat
+            return Seat.findOne({ id: seatId }).then(seat => {
+              const reservation = new this({
+                user,
+                seat
+              })
+              return reservation.save()
             })
-            return reservation.save()
           })
         })
       })

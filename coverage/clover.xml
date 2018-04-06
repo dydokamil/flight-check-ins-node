@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1523008783547" clover="3.2.0">
-  <project timestamp="1523008783547" name="All files">
-    <metrics statements="143" coveredstatements="118" conditionals="34" coveredconditionals="9" methods="32" coveredmethods="24" elements="209" coveredelements="151" complexity="0" loc="143" ncloc="143" packages="3" files="10" classes="10">
+<coverage generated="1523010594033" clover="3.2.0">
+  <project timestamp="1523010594033" name="All files">
+    <metrics statements="156" coveredstatements="130" conditionals="36" coveredconditionals="10" methods="39" coveredmethods="30" elements="231" coveredelements="170" complexity="0" loc="156" ncloc="156" packages="3" files="10" classes="10">
       <package name="fligth-check-in-node">
         <metrics statements="53" coveredstatements="36" conditionals="18" coveredconditionals="1" methods="5" coveredmethods="2"/>
         <file name="app.js" path="/Users/kamildydo/Projects/express-projs/fligth-check-in-node/app.js">
@@ -68,9 +68,9 @@
         </file>
       </package>
       <package name="fligth-check-in-node.models">
-        <metrics statements="47" coveredstatements="43" conditionals="6" coveredconditionals="3" methods="17" coveredmethods="16"/>
+        <metrics statements="48" coveredstatements="44" conditionals="6" coveredconditionals="3" methods="18" coveredmethods="17"/>
         <file name="reservation.js" path="/Users/kamildydo/Projects/express-projs/fligth-check-in-node/models/reservation.js">
-          <metrics statements="23" coveredstatements="20" conditionals="6" coveredconditionals="3" methods="7" coveredmethods="7"/>
+          <metrics statements="24" coveredstatements="21" conditionals="6" coveredconditionals="3" methods="8" coveredmethods="8"/>
           <line num="1" count="3" type="stmt"/>
           <line num="2" count="3" type="stmt"/>
           <line num="4" count="3" type="stmt"/>
@@ -90,10 +90,11 @@
           <line num="30" count="1" type="cond" truecount="1" falsecount="1"/>
           <line num="31" count="0" type="stmt"/>
           <line num="34" count="1" type="stmt"/>
-          <line num="38" count="1" type="stmt"/>
-          <line num="46" count="3" type="stmt"/>
-          <line num="47" count="1" type="stmt"/>
-          <line num="50" count="3" type="stmt"/>
+          <line num="35" count="1" type="stmt"/>
+          <line num="39" count="1" type="stmt"/>
+          <line num="48" count="3" type="stmt"/>
+          <line num="49" count="1" type="stmt"/>
+          <line num="52" count="3" type="stmt"/>
         </file>
         <file name="seat.js" path="/Users/kamildydo/Projects/express-projs/fligth-check-in-node/models/seat.js">
           <metrics statements="6" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -127,7 +128,7 @@
         </file>
       </package>
       <package name="fligth-check-in-node.routes">
-        <metrics statements="43" coveredstatements="39" conditionals="10" coveredconditionals="5" methods="10" coveredmethods="6"/>
+        <metrics statements="55" coveredstatements="50" conditionals="12" coveredconditionals="6" methods="16" coveredmethods="11"/>
         <file name="index.js" path="/Users/kamildydo/Projects/express-projs/fligth-check-in-node/routes/index.js">
           <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
           <line num="1" count="2" type="stmt"/>
@@ -155,17 +156,29 @@
           <line num="29" count="2" type="stmt"/>
         </file>
         <file name="seats.js" path="/Users/kamildydo/Projects/express-projs/fligth-check-in-node/routes/seats.js">
-          <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+          <metrics statements="22" coveredstatements="21" conditionals="2" coveredconditionals="1" methods="8" coveredmethods="7"/>
           <line num="1" count="2" type="stmt"/>
           <line num="2" count="2" type="stmt"/>
           <line num="3" count="2" type="stmt"/>
-          <line num="5" count="2" type="stmt"/>
+          <line num="4" count="2" type="stmt"/>
+          <line num="6" count="2" type="stmt"/>
           <line num="7" count="2" type="stmt"/>
           <line num="9" count="2" type="stmt"/>
-          <line num="12" count="2" type="stmt"/>
-          <line num="13" count="1" type="stmt"/>
-          <line num="14" count="1" type="stmt"/>
-          <line num="18" count="2" type="stmt"/>
+          <line num="11" count="2" type="stmt"/>
+          <line num="14" count="2" type="stmt"/>
+          <line num="15" count="1" type="stmt"/>
+          <line num="16" count="1" type="stmt"/>
+          <line num="20" count="2" type="stmt"/>
+          <line num="21" count="1" type="stmt"/>
+          <line num="22" count="1" type="cond" truecount="1" falsecount="1"/>
+          <line num="23" count="0" type="stmt"/>
+          <line num="27" count="1" type="stmt"/>
+          <line num="31" count="1" type="stmt"/>
+          <line num="32" count="1" type="stmt"/>
+          <line num="33" count="1" type="stmt"/>
+          <line num="36" count="1" type="stmt"/>
+          <line num="37" count="1" type="stmt"/>
+          <line num="43" count="2" type="stmt"/>
         </file>
         <file name="users.js" path="/Users/kamildydo/Projects/express-projs/fligth-check-in-node/routes/users.js">
           <metrics statements="13" coveredstatements="11" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="2"/>

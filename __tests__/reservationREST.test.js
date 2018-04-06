@@ -1,9 +1,7 @@
 const request = require('supertest')
 
-const { SEATS_NUM } = require('../generateSeats')
-const User = require('../models/user')
-
 const app = require('../app')
+const { SEATS_NUM } = require('../generateSeats')
 
 describe('reservation REST', () => {
   const userData = {
@@ -29,6 +27,14 @@ describe('reservation REST', () => {
           .send({ seat })
           .then(response => {
             expect(response.body.user.email).toEqual(userData.email)
+
+            return request(app)
+              .get('/seats/available')
+              .set('Accept', 'application/json')
+              .then(result => {
+                // console.log(result.body)
+                expect(result.body.length).toBe(SEATS_NUM - 1)
+              })
           })
       })
   })
