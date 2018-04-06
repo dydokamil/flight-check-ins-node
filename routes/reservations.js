@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const { MONGOOSE_CHECK_IN_DEV } = require('../consts')
 
 const Reservation = require('../models/reservation')
+const User = require('../models/user')
 
 mongoose.connect(MONGOOSE_CHECK_IN_DEV)
 

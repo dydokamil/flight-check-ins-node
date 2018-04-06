@@ -26,14 +26,23 @@ describe('reservation REST', () => {
           .send({ password: userData.password })
           .send({ seat })
           .then(response => {
-            expect(response.body.user.email).toEqual(userData.email)
+            const { user } = response.body
+            expect(user.email).toEqual(userData.email)
 
             return request(app)
               .get('/seats/available')
               .set('Accept', 'application/json')
               .then(result => {
-                // console.log(result.body)
                 expect(result.body.length).toBe(SEATS_NUM - 1)
+
+                return request(app)
+                  .get('/seats/mine')
+                  .send({ email: userData.email })
+                  .send({ password: userData.password })
+                  .set('Accept', 'application/json')
+                  .then(result => {
+                    expect(result.body.user).toEqual(user._id)
+                  })
               })
           })
       })
