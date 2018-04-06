@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">42.11% </span>
+        <span class="strong">77.78% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>8/19</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
-        <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
-        <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>14/18</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">50% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>3/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">66.67% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">93.33% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>8/16</span>
+        <span class='fraction'>14/15</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -86,17 +86,17 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -110,25 +110,25 @@ const mongoose = require('mongoose')
 &nbsp;
 const { MONGOOSE_CHECK_IN_DEV } = require('../consts')
 &nbsp;
-const Reservation = require('../models/seat')
+const Reservation = require('../models/reservation')
 &nbsp;
 mongoose.connect(MONGOOSE_CHECK_IN_DEV)
 &nbsp;
-router.post('/', <span class="fstat-no" title="function not covered" >fu</span>nction (req, res) {
-<span class="cstat-no" title="statement not covered" >  if (!('email' in req.body)) <span class="cstat-no" title="statement not covered" >res.json('Provide `email`.')</span></span>
-  else <span class="cstat-no" title="statement not covered" >if (!('password' in req.body)) <span class="cstat-no" title="statement not covered" >res.json('Provide `password`.')</span></span>
-  else <span class="cstat-no" title="statement not covered" >if (!('seat' in req.body)) <span class="cstat-no" title="statement not covered" >res.json('Provide `seat` id.')</span></span>
+router.post('/', function (req, res) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!('email' in req.body)) <span class="cstat-no" title="statement not covered" >res.json('Provide `email`.')</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if (!('password' in req.body)) <span class="cstat-no" title="statement not covered" >res.json('Provide `password`.')</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if (!('seat' in req.body)) <span class="cstat-no" title="statement not covered" >res.json('Provide `seat` id.')</span>
   else {
-<span class="cstat-no" title="statement not covered" >    console.log(req.body)</span>
+    // console.log(req.body)
 &nbsp;
-    const { email, password, seat } = <span class="cstat-no" title="statement not covered" >req.body</span>
+    const { email, password, seat } = req.body
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    Reservation.makeReservation(email, password, seat)</span>
-      .then(<span class="fstat-no" title="function not covered" >re</span>sult =&gt; {
-<span class="cstat-no" title="statement not covered" >        res.json(result)</span>
+    Reservation.makeReservation(email, password, seat)
+      .then(result =&gt; {
+        return res.json(result)
         // return res.json(result)
       })
-      .catch(<span class="fstat-no" title="function not covered" >er</span>r =&gt; <span class="cstat-no" title="statement not covered" >res.json(err))</span>
+      .catch(<span class="fstat-no" title="function not covered" >er</span>r =&gt; <span class="cstat-no" title="statement not covered" >res.status(400).json(err.message))</span>
   }
 })
 &nbsp;
@@ -139,7 +139,7 @@ module.exports = router
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Apr 06 2018 11:23:50 GMT+0200 (CEST)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Apr 06 2018 11:59:43 GMT+0200 (CEST)
 </div>
 </div>
 <script src="../../prettify.js"></script>

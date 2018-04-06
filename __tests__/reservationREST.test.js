@@ -15,15 +15,21 @@ describe('reservation REST', () => {
 
   it('should create a user and make a reservation', () => {
     return request(app)
-      .post('/seats')
-      .field('email', userData.email)
-      .field('password', userData.password)
-      .field('seat', seat)
+      .post('/users')
+      .send({ email: userData.email })
+      .send({ password: userData.password })
       .set('Accept', 'application/json')
       .then(response => {
-        console.log(response.body)
-        expect(response.body.reservation.user.email).toBe(userData.email)
-        expect(response.body).toMatchSnapshot()
+        expect(response.body).toBe(userData.email)
+
+        return request(app)
+          .post('/reservations')
+          .send({ email: userData.email })
+          .send({ password: userData.password })
+          .send({ seat })
+          .then(response => {
+            expect(response.body.user.email).toEqual(userData.email)
+          })
       })
   })
 })
