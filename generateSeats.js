@@ -38,8 +38,8 @@ function generateSeats () {
         }
       })
     }
-    console.log(seats)
+    // console.log(seats)
   })
 }
 
-module.exports = generateSeats
+module.exports = { generateSeats, SEATS_NUM }

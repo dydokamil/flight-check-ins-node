@@ -36,11 +36,11 @@ describe('mongoose Schema', () => {
         return Seat.findOne({ id: 1 }).then(seat => {
           expect(seat._id).toBeDefined()
           return Reservation.makeReservation(
-            user,
+            userData.email,
             userData.password,
             seat
           ).then(reservation => {
-            expect(reservation.user).toBe(user)
+            expect(reservation.user.toJSON()).toEqual(user.toJSON())
           })
         })
       })

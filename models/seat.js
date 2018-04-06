@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const Reservation = require('./reservation')
+// const Reservation = require('./reservation')
 
 const Schema = mongoose.Schema
 

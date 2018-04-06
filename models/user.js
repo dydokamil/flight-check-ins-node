@@ -22,7 +22,10 @@ UserSchema.statics.createUser = function (email, password) {
       email,
       password: hash
     })
-    return user.save().then(user => user.email)
+    return user
+      .save()
+      .then(user => user.email)
+      .catch(err => err)
   })
 }
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const moment = require('moment')
 
 const User = require('./user')
+const Seat = require('./seat')
 
 const Schema = mongoose.Schema
 
@@ -12,26 +13,31 @@ const ReservationSchema = new Schema({
   paid: { type: Schema.Types.Boolean, default: false }
 })
 
-ReservationSchema.statics.makeReservation = function (user, password, seat) {
-  return this.findOne({ user }).then(retrievedUser => {
-    if (retrievedUser) {
-      throw new Error('You have already made a reservation.')
-    }
-    return this.findOne({ seat }).then(retrievedSeat => {
-      if (retrievedSeat) {
-        throw new Error('This seat is already reserved.')
+ReservationSchema.statics.makeReservation = function (email, password, seatId) {
+  return User.findOne({ email }).then(user => {
+    return this.findOne({ user }).then(retrievedUser => {
+      if (retrievedUser) {
+        throw new Error('You have already made a reservation.')
       }
 
-      return user.comparePassword(password).then(same => {
-        if (!same) {
-          throw new Error('Password incorrect.')
-        }
+      return Seat.findOne({ id: seatId }).then(seat => {
+        return this.findOne({ seat }).then(retrievedSeat => {
+          if (retrievedSeat) {
+            throw new Error('This seat is already reserved.')
+          }
 
-        const reservation = new this({
-          user,
-          seat
+          return user.comparePassword(password).then(same => {
+            if (!same) {
+              throw new Error('Password incorrect.')
+            }
+
+            const reservation = new this({
+              user,
+              retrievedSeat
+            })
+            return reservation.save()
+          })
         })
-        return reservation.save()
       })
     })
   })

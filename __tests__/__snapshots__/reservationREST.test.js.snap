@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reservation REST should create a user and make a reservation 1`] = `Object {}`;
