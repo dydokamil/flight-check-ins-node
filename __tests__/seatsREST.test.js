@@ -14,4 +14,12 @@ describe('seats REST', function () {
 
     expect(response.body.length).toBe(SEATS_NUM)
   })
+
+  it('should respond with available seats', async () => {
+    const response = await request(app)
+      .get('/seats/available')
+      .set('Accept', 'application/json')
+
+    expect(response.body.length).toBe(SEATS_NUM)
+  })
 })

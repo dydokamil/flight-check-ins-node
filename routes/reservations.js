@@ -5,7 +5,6 @@ const mongoose = require('mongoose')
 const { MONGOOSE_CHECK_IN_DEV } = require('../consts')
 
 const Reservation = require('../models/reservation')
-const User = require('../models/user')
 
 mongoose.connect(MONGOOSE_CHECK_IN_DEV)
 
@@ -19,10 +18,7 @@ router.post('/', function (req, res) {
     const { email, password, seat } = req.body
 
     Reservation.makeReservation(email, password, seat)
-      .then(result => {
-        return res.json(result)
-        // return res.json(result)
-      })
+      .then(result => res.json(result))
       .catch(err => res.status(400).json(err.message))
   }
 })

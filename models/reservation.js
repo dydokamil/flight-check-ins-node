@@ -13,36 +13,38 @@ const ReservationSchema = new Schema({
   paid: { type: Schema.Types.Boolean, default: false }
 })
 
-ReservationSchema.statics.makeReservation = function (email, password, seatId) {
-  return User.findOne({ email }).then(user => {
-    return this.findOne({ user }).then(retrievedUser => {
-      if (retrievedUser) {
-        throw new Error('You have already made a reservation.')
-      }
+ReservationSchema.statics.makeReservation = async function (
+  email,
+  password,
+  seatId
+) {
+  // check if this user has already made a reservation
+  const user = await User.findOne({ email })
+  const retrievedUser = await this.findOne({ user })
+  if (retrievedUser) {
+    throw new Error('You have already made a reservation.')
+  }
 
-      return Seat.findOne({ id: seatId }).then(seat => {
-        return this.findOne({ seat }).then(retrievedSeat => {
-          if (retrievedSeat) {
-            throw new Error('This seat is already reserved.')
-          }
+  // check if this seat has already been reserved
+  const seat = await Seat.findOne({ id: seatId })
+  const retrievedSeat = await this.findOne({ seat })
+  if (retrievedSeat) {
+    throw new Error('This seat is already reserved.')
+  }
 
-          return user.comparePassword(password).then(same => {
-            if (!same) {
-              throw new Error('Password incorrect.')
-            }
+  // compare passwords
+  const same = await user.comparePassword(password)
+  if (!same) {
+    throw new Error('Password incorrect.')
+  }
 
-            return Seat.findOne({ id: seatId }).then(seat => {
-              const reservation = new this({
-                user,
-                seat
-              })
-              return reservation.save()
-            })
-          })
-        })
-      })
-    })
+  // create a new reservation insance
+  const seatToReserve = await Seat.findOne({ id: seatId })
+  const reservation = new this({
+    user,
+    seat: seatToReserve
   })
+  return reservation.save()
 }
 
 ReservationSchema.statics.removeAllReservations = function () {
