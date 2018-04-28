@@ -11,40 +11,36 @@ describe('reservation REST', () => {
 
   const seat = 1
 
-  it('should create a user and make a reservation', () => {
-    return request(app)
+  it('should create a user and make a reservation', async () => {
+    const userResponse = await request(app)
       .post('/users')
       .send({ email: userData.email })
       .send({ password: userData.password })
       .set('Accept', 'application/json')
-      .then(response => {
-        expect(response.body).toBe(userData.email)
 
-        return request(app)
-          .post('/reservations')
-          .send({ email: userData.email })
-          .send({ password: userData.password })
-          .send({ seat })
-          .then(response => {
-            const { user } = response.body
-            expect(user.email).toEqual(userData.email)
+    expect(userResponse.body).toBe(userData.email)
 
-            return request(app)
-              .get('/seats/available')
-              .set('Accept', 'application/json')
-              .then(result => {
-                expect(result.body.length).toBe(SEATS_NUM - 1)
+    const reservationResponse = await request(app)
+      .post('/reservations')
+      .send({ email: userData.email })
+      .send({ password: userData.password })
+      .send({ seat })
 
-                return request(app)
-                  .get('/seats/mine')
-                  .send({ email: userData.email })
-                  .send({ password: userData.password })
-                  .set('Accept', 'application/json')
-                  .then(result => {
-                    expect(result.body.user).toEqual(user._id)
-                  })
-              })
-          })
-      })
+    const { user } = reservationResponse.body
+    expect(user.email).toEqual(userData.email)
+
+    const responseAvailable = await request(app)
+      .get('/seats/available')
+      .set('Accept', 'application/json')
+
+    expect(responseAvailable.body.length).toBe(SEATS_NUM - 1)
+
+    const mineResponse = await request(app)
+      .get('/seats/mine')
+      .send({ email: userData.email })
+      .send({ password: userData.password })
+      .set('Accept', 'application/json')
+
+    expect(mineResponse.body.user).toEqual(user._id)
   })
 })

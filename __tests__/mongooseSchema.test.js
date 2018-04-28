@@ -30,24 +30,23 @@ describe('mongoose Schema', () => {
     mongoose.disconnect()
   })
 
-  it('should create a user and make a reservation', () => {
+  it('should create a user and make a reservation', async () => {
     const seatNum = 2
 
-    return User.createUser(userData.email, userData.password).then(email => {
-      expect(email).toBeDefined()
-      return User.findOne({ email }).then(user => {
-        expect(user.email).toBeDefined()
-        return Seat.findOne({ id: 1 }).then(seat => {
-          expect(seat._id).toBeDefined()
-          return Reservation.makeReservation(
-            userData.email,
-            userData.password,
-            seatNum
-          ).then(reservation => {
-            expect(reservation.user.toJSON()).toEqual(user.toJSON())
-          })
-        })
-      })
-    })
+    const email = await User.createUser(userData.email, userData.password)
+    expect(email).toBeDefined()
+
+    const user = await User.findOne({ email })
+    expect(user.email).toBeDefined()
+
+    const seat = await Seat.findOne({ id: 1 })
+    expect(seat._id).toBeDefined()
+
+    const reservation = await Reservation.makeReservation(
+      userData.email,
+      userData.password,
+      seatNum
+    )
+    expect(reservation.user.toJSON()).toEqual(user.toJSON())
   })
 })

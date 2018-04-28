@@ -5,14 +5,13 @@ const { SEATS_NUM } = require('../generateSeats')
 const app = require('../app')
 
 describe('seats REST', function () {
-  it('should respond with seats', function () {
+  it('should respond with seats', async () => {
     expect.assertions(1)
 
-    return request(app)
+    const response = await request(app)
       .get('/seats')
       .set('Accept', 'application/json')
-      .then(response => {
-        expect(response.body.length).toBe(SEATS_NUM)
-      })
+
+    expect(response.body.length).toBe(SEATS_NUM)
   })
 })
