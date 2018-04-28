@@ -28,7 +28,7 @@ ReservationSchema.statics.makeReservation = async function (
   // check if this seat has already been reserved
   const seat = await Seat.findOne({ id: seatId })
   const retrievedSeat = await this.findOne({ seat })
-  if (retrievedSeat) {
+  if (moment.utc().isSameOrBefore(retrievedSeat.reservedUntil)) {
     throw new Error('This seat is already reserved.')
   }
 

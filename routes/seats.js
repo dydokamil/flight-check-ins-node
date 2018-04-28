@@ -11,27 +11,49 @@ const User = require('../models/user')
 mongoose.connect(MONGOOSE_CHECK_IN_DEV)
 
 /* GET seats listing. */
-router.get('/', function (req, res, next) {
-  Seat.find({}).then(seats => {
-    res.json(seats)
-  })
-})
+// router.get('/', function (req, res, next) {
+//   Seat.find({}).then(seats => {
+//     res.json(seats)
+//   })
+// })
 
-router.get('/available', async (req, res, next) => {
-  const reservations = await Reservation.find({})
-  if (reservations.length === 0) {
-    return Seat.find({}).then(seats => res.json(seats))
-  }
+router.get('/', async (req, res, next) => {
+  // const reservations = await Reservation.find({})
+  // if (reservations.length === 0) {
+  //   return Seat.find({}).then(seats => res.json(seats))
+  // }
 
   // get reserved seats
-  const reservedSeats = await Reservation.find({
-    paid: false,
-    reservedUntil: { $gte: moment.utc() }
+  // const notReservedSeats = await Reservation.find({
+  //   reservedUntil: { $lte: moment.utc(), paid: false }
+  // })
+  const validReservations = await Reservation.find({
+    reservedUntil: { $lt: moment.utc() },
+    paid: false
   })
-  const reservedSeatIds = reservedSeats.map(reservedSeat => reservedSeat.seat)
 
-  const available = await Seat.find({ _id: { $nin: reservedSeatIds } })
-  res.json(available)
+  let reservedSeats = await Seat.find({
+    _id: { $in: validReservations }
+  }).lean()
+
+  reservedSeats = reservedSeats.map(reservedSeat => ({
+    ...reservedSeat,
+    available: false
+  }))
+
+  let notReservedSeats = await Seat.find({
+    _id: { $nin: validReservations }
+  }).lean()
+
+  notReservedSeats = notReservedSeats.map(notReservedSeat => ({
+    ...notReservedSeat,
+    available: true
+  }))
+
+  res.json([
+    ...Object.values(reservedSeats),
+    ...Object.values(notReservedSeats)
+  ])
 })
 
 router.get('/mine', async (req, res, next) => {
