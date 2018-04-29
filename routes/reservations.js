@@ -28,4 +28,21 @@ router.post('/', async function (req, res) {
   }
 })
 
+router.post('/random', async function (req, res) {
+  if (!('token' in req.body)) {
+    res.status(401).json({ error: 'Provide `token`.' })
+  } else {
+    const { token } = req.body
+    const decoded = await User.verifyToken(token)
+    const { email } = decoded
+
+    Reservation.makeRandomReservation(email)
+      .then(response => res.json(response))
+      .catch(err => {
+        console.log('ERR', err)
+        res.status(500).json({ error: err })
+      })
+  }
+})
+
 module.exports = router

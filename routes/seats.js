@@ -1,58 +1,27 @@
 var express = require('express')
 var router = express.Router()
 const mongoose = require('mongoose')
-const moment = require('moment')
 
 const { MONGOOSE_CHECK_IN_DEV } = require('../consts')
+const { BASE_PRICE, CHECK_IN_FEE } = require('../consts')
 const Reservation = require('../models/reservation')
-const Seat = require('../models/seat')
 const User = require('../models/user')
 
 mongoose.connect(MONGOOSE_CHECK_IN_DEV)
 
-/* GET seats listing. */
-// router.get('/', function (req, res, next) {
-//   Seat.find({}).then(seats => {
-//     res.json(seats)
-//   })
-// })
-
 router.get('/', async (req, res, next) => {
-  // const reservations = await Reservation.find({})
-  // if (reservations.length === 0) {
-  //   return Seat.find({}).then(seats => res.json(seats))
-  // }
+  const {
+    reservedSeats,
+    notReservedSeats
+  } = await Reservation.getSeatsAndReservations()
 
-  // get reserved seats
-  // const notReservedSeats = await Reservation.find({
-  //   reservedUntil: { $lte: moment.utc(), paid: false }
-  // })
-  let reservedSeats = await Reservation.find({
-    reservedUntil: { $gte: moment.utc() }
-  })
-    .select('seat -_id')
-    .lean()
-
-  reservedSeats = reservedSeats.map(reservedSeat => reservedSeat.seat)
-  reservedSeats = await Seat.find({
-    _id: { $in: reservedSeats }
-  })
-
-  let notReservedSeats = await Seat.find({
-    _id: {
-      $nin: reservedSeats
-    }
-  }).lean()
-
-  notReservedSeats = notReservedSeats.map(notReservedSeat => ({
-    ...notReservedSeat,
-    available: true
-  }))
-
-  res.json([
+  let seats = [
     ...Object.values(reservedSeats),
     ...Object.values(notReservedSeats)
-  ])
+  ]
+  seats = seats.sort((seat1, seat2) => seat1.id - seat2.id)
+
+  res.json({ seats, basePrice: BASE_PRICE, checkInFee: CHECK_IN_FEE })
 })
 
 router.get('/mine', async (req, res, next) => {
