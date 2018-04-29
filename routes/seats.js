@@ -24,22 +24,4 @@ router.get('/', async (req, res, next) => {
   res.json({ seats, basePrice: BASE_PRICE, checkInFee: CHECK_IN_FEE })
 })
 
-router.get('/mine', async (req, res, next) => {
-  if (!('email' in req.body)) res.json('Provide `email`.')
-  else if (!('password' in req.body)) res.json('Provide `password`.')
-  else {
-    const { email, password } = req.body
-    const user = await User.findOne({ email })
-    if (!user) {
-      return res.status(404).json('User not found')
-    }
-
-    const same = await user.comparePassword(password)
-    if (!same) return res.status(401).json('Password incorrect.')
-
-    const myReservations = await Reservation.findOne({ user })
-    return res.json(myReservations)
-  }
-})
-
 module.exports = router

@@ -12,11 +12,14 @@ const privateKey = fs.readFileSync(
 
 // singup route
 router.post('/', async (req, res) => {
-  if (!('email' in req.body) || req.body.email.length === 0) {
+  if (!Object.keys(req.body).includes('email') || req.body.email.length === 0) {
     res.status(400).json({
       error: 'Provide `email`.'
     })
-  } else if (!('password' in req.body) || req.body.password.length === 0) {
+  } else if (
+    !Object.keys(req.body).includes('password') ||
+    req.body.password.length === 0
+  ) {
     res.status(400).json({
       error: 'Provide `password`.'
     })
@@ -43,9 +46,12 @@ function generateToken (email) {
 
 // login route
 router.post('/login', async (req, res) => {
-  if (!('email' in req.body) || req.body.email.length === 0) {
+  if (!Object.keys(req.body).includes('email') || req.body.email.length === 0) {
     res.status(400).json({ error: 'Provide `email`.' })
-  } else if (!('password' in req.body) || req.body.password.length === 0) {
+  } else if (
+    !Object.keys(req.body).includes('password') ||
+    req.body.password.length === 0
+  ) {
     res.status(400).json({
       error: 'Provide `password`.'
     })
