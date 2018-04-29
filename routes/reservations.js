@@ -5,21 +5,26 @@ const mongoose = require('mongoose')
 const { MONGOOSE_CHECK_IN_DEV } = require('../consts')
 
 const Reservation = require('../models/reservation')
+const User = require('../models/user')
 
 mongoose.connect(MONGOOSE_CHECK_IN_DEV)
 
-router.post('/', function (req, res) {
-  if (!('email' in req.body)) res.json('Provide `email`.')
-  else if (!('password' in req.body)) res.json('Provide `password`.')
-  else if (!('seat' in req.body)) res.json('Provide `seat` id.')
-  else {
-    // console.log(req.body)
+router.post('/', async function (req, res) {
+  if (!('token' in req.body)) {
+    res.status(401).json({ error: 'Provide `token`.' })
+  } else if (!('seat' in req.body)) {
+    res.status(400).json({ error: 'Provide `seat` id.' })
+  } else {
+    const { token, seat } = req.body
 
-    const { email, password, seat } = req.body
+    const decoded = await User.verifyToken(token)
+    const { email } = decoded
 
-    Reservation.makeReservation(email, password, seat)
+    console.log('Listen here fam', decoded)
+
+    Reservation.makeReservation(email, seat)
       .then(result => res.json(result))
-      .catch(err => res.status(400).json(err.message))
+      .catch(err => res.status(400).json({ error: err.message }))
   }
 })
 

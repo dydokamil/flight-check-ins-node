@@ -9,42 +9,50 @@ const Schema = mongoose.Schema
 const ReservationSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   seat: { type: Schema.Types.ObjectId, ref: 'Seat' },
-  reservedUntil: { type: Date, default: moment.utc().add(3, 'minutes') },
+  reservedUntil: { type: Date },
   paid: { type: Schema.Types.Boolean, default: false }
 })
 
-ReservationSchema.statics.makeReservation = async function (
-  email,
-  password,
-  seatId
-) {
+ReservationSchema.statics.makeReservation = async function (email, seatId) {
   // check if this user has already made a reservation
   const user = await User.findOne({ email })
-  const retrievedUser = await this.findOne({ user })
-  if (retrievedUser) {
+  if (!user) throw new Error('User not found!')
+  const reservationForUser = await this.findOne({
+    user,
+    reservedUntil: {
+      $gte: moment.utc()
+    }
+  })
+  if (reservationForUser) {
     throw new Error('You have already made a reservation.')
   }
+  const seat = await Seat.findOne({ id: seatId })
+  if (!seat) throw new Error('Seat not found!')
 
   // check if this seat has already been reserved
-  const seat = await Seat.findOne({ id: seatId })
-  const retrievedSeat = await this.findOne({ seat })
-  if (moment.utc().isSameOrBefore(retrievedSeat.reservedUntil)) {
+  const reservationForSeat = await this.findOne({
+    seat,
+    reservedUntil: {
+      $gte: moment.utc()
+    }
+  })
+  if (reservationForSeat) {
     throw new Error('This seat is already reserved.')
-  }
-
-  // compare passwords
-  const same = await user.comparePassword(password)
-  if (!same) {
-    throw new Error('Password incorrect.')
   }
 
   // create a new reservation insance
   const seatToReserve = await Seat.findOne({ id: seatId })
   const reservation = new this({
     user,
-    seat: seatToReserve
+    seat: seatToReserve,
+    reservedUntil: moment.utc().add(3, 'minutes')
   })
-  return reservation.save()
+  return reservation.save().then(res => ({
+    _id: res._id,
+    paid: res.paid,
+    reservedUntil: res.reservedUntil,
+    seat: res.seat
+  }))
 }
 
 ReservationSchema.statics.removeAllReservations = function () {

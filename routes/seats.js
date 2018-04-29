@@ -27,22 +27,21 @@ router.get('/', async (req, res, next) => {
   // const notReservedSeats = await Reservation.find({
   //   reservedUntil: { $lte: moment.utc(), paid: false }
   // })
-  const validReservations = await Reservation.find({
-    reservedUntil: { $lt: moment.utc() },
-    paid: false
+  let reservedSeats = await Reservation.find({
+    reservedUntil: { $gte: moment.utc() }
+  })
+    .select('seat -_id')
+    .lean()
+
+  reservedSeats = reservedSeats.map(reservedSeat => reservedSeat.seat)
+  reservedSeats = await Seat.find({
+    _id: { $in: reservedSeats }
   })
 
-  let reservedSeats = await Seat.find({
-    _id: { $in: validReservations }
-  }).lean()
-
-  reservedSeats = reservedSeats.map(reservedSeat => ({
-    ...reservedSeat,
-    available: false
-  }))
-
   let notReservedSeats = await Seat.find({
-    _id: { $nin: validReservations }
+    _id: {
+      $nin: reservedSeats
+    }
   }).lean()
 
   notReservedSeats = notReservedSeats.map(notReservedSeat => ({

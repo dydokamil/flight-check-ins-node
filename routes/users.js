@@ -13,7 +13,9 @@ const privateKey = fs.readFileSync(
 // singup route
 router.post('/', async (req, res) => {
   if (!('email' in req.body) || req.body.email.length === 0) {
-    res.status(400).json({ error: 'Provide `email`.' })
+    res.status(400).json({
+      error: 'Provide `email`.'
+    })
   } else if (!('password' in req.body) || req.body.password.length === 0) {
     res.status(400).json({
       error: 'Provide `password`.'
@@ -26,14 +28,17 @@ router.post('/', async (req, res) => {
     if (result.code === 11000) {
       res.status(400).json({ error: 'This email is already taken!' })
     } else {
-      const token = generateToken(result.email)
-      res.json({ token, email }).catch(err => res.status(500).json(err))
+      const token = await generateToken(result.email)
+      res.json({ token, email })
     }
   }
 })
 
 function generateToken (email) {
-  return jwt.sign({ email }, privateKey)
+  return new Promise((resolve, reject) => {
+    const sign = jwt.sign({ email }, privateKey, { algorithm: 'RS256' })
+    resolve(sign)
+  })
 }
 
 // login route
@@ -57,7 +62,8 @@ router.post('/login', async (req, res) => {
         res.status(401).json({ error: 'Password incorrect.' })
       } else {
         // generate token
-        res.json({ token: generateToken(user.email), email: user.email })
+        const token = await generateToken(user.email)
+        res.json({ token, email: user.email })
       }
     }
   }
