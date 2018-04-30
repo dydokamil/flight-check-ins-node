@@ -117,7 +117,7 @@ ReservationSchema.statics.cancelReservation = async function (email) {
   const reservation = await this.findOne({ user })
   const seat = await Seat.findById(reservation.seat)
 
-  reservation.remove()
+  await reservation.remove()
   return seat
 }
 
