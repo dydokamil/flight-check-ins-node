@@ -74,8 +74,20 @@ router.get('/mine', async (req, res, next) => {
       paid: myReservation.paid,
       price: myReservation.price
     })
-    // return res.json(myReservations)
   }
+})
+
+router.post('/cancel', async (req, res, next) => {
+  if (!Object.keys(req.body).includes('token')) {
+    return res.status(401).error({ error: 'Provide `token`.' })
+  }
+
+  const { token } = req.body
+  const decoded = await User.verifyToken(token)
+  const { email } = decoded
+
+  const result = await Reservation.cancelReservation(email)
+  return res.json(result)
 })
 
 module.exports = router

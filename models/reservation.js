@@ -110,4 +110,15 @@ ReservationSchema.statics.removeAllReservations = function () {
   return this.remove({})
 }
 
+ReservationSchema.statics.cancelReservation = async function (email) {
+  const user = await User.findOne({ email })
+  if (!user) throw new Error('User not found!')
+
+  const reservation = await this.findOne({ user })
+  const seat = await Seat.findById(reservation.seat)
+
+  reservation.remove()
+  return seat
+}
+
 module.exports = mongoose.model('Reservation', ReservationSchema)

@@ -16,9 +16,7 @@ const UserSchema = new Schema({
 })
 
 function hashPassword (password) {
-  return bcrypt.hash(password, 10).then(hash => {
-    return hash
-  })
+  return bcrypt.hash(password, 10).then(hash => hash)
 }
 
 UserSchema.statics.createUser = function (email, password) {
@@ -31,9 +29,7 @@ UserSchema.statics.createUser = function (email, password) {
     })
     return user
       .save()
-      .then(user => ({
-        email: user.email
-      }))
+      .then(user => ({ email: user.email }))
       .catch(err => err)
   })
 }
